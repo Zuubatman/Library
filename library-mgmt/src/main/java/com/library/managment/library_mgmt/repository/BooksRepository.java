@@ -3,14 +3,15 @@ package com.library.managment.library_mgmt.repository;
 import com.library.managment.library_mgmt.entities.Author;
 import com.library.managment.library_mgmt.entities.Book;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class BooksRepository {
@@ -46,14 +47,21 @@ public class BooksRepository {
         return mongoOps.remove(query, Book.class);
     }
 
-    public Book updateBook( Book book){
+    public UpdateResult updateBook(Book book){
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(book.getId()));
-        mongoOps.findAllAndRemove(query, Book.class);
-        return mongoOps.insert(book);
+
+        Update update = new Update();
+        update.set("title", book.getTitle());
+        update.set("isbn", book.getIsbn());
+        update.set("publicationYear", book.getPublicationYear());
+        update.set("authorId", book.getAuthorId());
+
+        return mongoOps.updateFirst(query, update, Book.class);
+
     }
 
-    public List<Book> searchBook(String name){
+    public List<Book> searchByTitleOrAuthor(String name){
         Query query1 = new Query();
         query1.addCriteria(Criteria.where("name").is(name));
         List<Author> authors = mongoOps.find(query1, Author.class);

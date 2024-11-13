@@ -3,6 +3,7 @@ package com.library.managment.library_mgmt.controllers;
 import com.library.managment.library_mgmt.entities.Book;
 import com.library.managment.library_mgmt.service.BooksService;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,13 +45,12 @@ public class BooksController {
     }
 
     @GetMapping("/update")
-    public Book updateBook(@RequestBody Book book){
+    public UpdateResult updateBook(@RequestBody Book book){
         return service.updateBook(book);
     }
 
-//    http://localhost:8080/hello?name=Joao
-//    @GetMapping("/hello")
-//    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-//        return String.format("Hello %s!", name);
-//    }
+    @GetMapping("/search")
+    public List<Book> searchByTitleOrAuthor(@RequestParam(value = "name") String name){
+        return service.searchByNameOrAuthor(name);
+    }
 }

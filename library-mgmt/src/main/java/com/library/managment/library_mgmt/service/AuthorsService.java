@@ -3,6 +3,7 @@ package com.library.managment.library_mgmt.service;
 import com.library.managment.library_mgmt.entities.Author;
 import com.library.managment.library_mgmt.repository.AuthorsRepository;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class AuthorsService {
         return repository.deleteAuthor(id);
     }
 
-    public Author updateAuthor(Author author){
+    public UpdateResult updateAuthor(Author author){
         return repository.updateAuthor(author);
     }
 

@@ -2,9 +2,11 @@ package com.library.managment.library_mgmt.repository;
 
 import com.library.managment.library_mgmt.entities.Author;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,10 +43,16 @@ public class AuthorsRepository {
         return mongoOps.remove(query, Author.class);
     }
 
-    public Author updateAuthor(Author author){
+    public UpdateResult updateAuthor(Author author){
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(author.getId()));
-        mongoOps.findAllAndRemove(query, Author.class);
-        return mongoOps.insert(author);
+
+        Update update = new Update();
+        update.set("name", author.getName());
+        update.set("biography", author.getBiography());
+        update.set("birthDate", author.getBirthDate());
+
+        return mongoOps.updateFirst(query, update, Author.class);
+
     }
 }

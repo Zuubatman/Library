@@ -3,6 +3,7 @@ package com.library.managment.library_mgmt.controllers;
 import com.library.managment.library_mgmt.entities.Author;
 import com.library.managment.library_mgmt.service.AuthorsService;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class AuthorsContoller {
     }
 
     @GetMapping("/update")
-    public Author updateAuthor(@RequestBody Author author){
+    public UpdateResult updateAuthor(@RequestBody Author author){
         return service.updateAuthor(author);
     }
 }
