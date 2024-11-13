@@ -2,6 +2,7 @@ package com.library.managment.library_mgmt.service;
 
 import com.library.managment.library_mgmt.entities.Book;
 import com.library.managment.library_mgmt.repository.BooksRepository;
+import com.mongodb.client.result.DeleteResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 @Service
 public class BooksService {
 
-    private final BooksRepository repository;
+    final private BooksRepository repository;
 
     public BooksService(BooksRepository _repository){
         this.repository = _repository;
@@ -17,5 +18,25 @@ public class BooksService {
 
     public List<Book> getAllBooks(){
         return repository.getAllBooks();
+    }
+
+    public Book getBookById(String id){
+        return repository.getBookById(id);
+    }
+
+    public List<Book> getBookByTitle(String title){
+        return repository.getBooksByTitle(title);
+    }
+
+    public Book addBook(Book book){
+        return repository.addBook(book);
+    }
+
+    public DeleteResult deleteBook(String id){
+        return repository.deleteBook(id);
+    }
+
+    public Book updateBook(Book book){
+        return repository.updateBook(book);
     }
 }

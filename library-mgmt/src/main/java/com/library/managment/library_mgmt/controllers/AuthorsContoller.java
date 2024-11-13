@@ -2,9 +2,8 @@ package com.library.managment.library_mgmt.controllers;
 
 import com.library.managment.library_mgmt.entities.Author;
 import com.library.managment.library_mgmt.service.AuthorsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.mongodb.client.result.DeleteResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +19,30 @@ public class AuthorsContoller {
     @GetMapping()
     public List<Author> getAllAuthors(){
         return service.getAllAuthors();
+    }
+
+    @GetMapping("/getById")
+    public Author getAuthorById(@RequestParam(value = "authorId")String id){
+        return service.getAuthorById(id);
+    }
+
+    @GetMapping("/getByName")
+    public List<Author> getAuthorByName(@RequestParam(value = "name") String name){
+        return service.getAuthorByName(name);
+    }
+
+    @GetMapping("/add")
+    public Author addAuthor(@RequestBody Author author){
+        return service.addAuthor(author);
+    }
+
+    @GetMapping("/delete")
+    public DeleteResult deleteAuthor(@RequestParam(value = "id") String id){
+        return service.deleteAuthor(id);
+    }
+
+    @GetMapping("/update")
+    public Author updateAuthor(@RequestBody Author author){
+        return service.updateAuthor(author);
     }
 }

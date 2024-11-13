@@ -16,9 +16,9 @@ public class Author {
     @Getter
     private String biography;
     @Getter
-    private Date birthDate;
+    private String birthDate;
 
-    public Author(String name, String biography, Date birthDate){
+    public Author(String name, String biography, String birthDate){
         this.name = name;
         this.biography = biography;
         this.birthDate = birthDate;
