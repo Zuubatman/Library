@@ -3,8 +3,6 @@ package com.library.managment.library_mgmt.controllers;
 import com.library.managment.library_mgmt.entities.Book;
 import com.library.managment.library_mgmt.service.BooksService;
 import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
-import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -28,8 +26,16 @@ public class BooksController {
     }
 
     @GetMapping("/getById")
-    public Book getBookById(@RequestParam(value = "id") String id){
-        return service.getBookById(id);
+    public ResponseEntity<?> getBooksById(@RequestParam(value = "id") String id){
+        if(id == null|| id.trim().isEmpty()){
+            return ResponseEntity.badRequest().body("Validation errors found.");
+        }
+        try {
+            return ResponseEntity.ok(service.getBookById(id));
+
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body("An error occoured.");
+        }
     }
 
     @GetMapping("/getByTitle")
@@ -52,8 +58,20 @@ public class BooksController {
     }
 
     @DeleteMapping("/delete")
-    public DeleteResult deleteBook(@RequestParam(value = "id") String id){
-       return service.deleteBook(id);
+    public ResponseEntity<String> deleteBook(@RequestParam(value = "id") String id){
+        if(id.trim().isEmpty() || id == null){
+            return ResponseEntity.badRequest().body("Validation errors found.");
+        }
+        try{
+            var deleted = service.deleteBook(id);
+            if(deleted.getDeletedCount() > 0){
+                return ResponseEntity.ok().body("Book deleted");
+            }
+            return ResponseEntity.badRequest().body("Book not found");
+
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body("An error has occurred.");
+        }
     }
 
     @PatchMapping("/update")

@@ -66,10 +66,21 @@ public class AuthorsContoller {
     }
 
     @DeleteMapping("/delete")
-    public DeleteResult deleteAuthor(@RequestParam(value = "id") String id){
-        return service.deleteAuthor(id);
-    }
+    public ResponseEntity<String> deleteAuthor(@RequestParam(value = "id") String id){
+        if(id.trim().isEmpty() || id == null){
+            return ResponseEntity.badRequest().body("Validation errors found.");
+        }
+        try{
+            var deleted = service.deleteAuthor(id);
+            if(deleted.getDeletedCount() > 0){
+                return ResponseEntity.ok().body("Author deleted");
+            }
+            return ResponseEntity.badRequest().body("Author not found");
 
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body("An error has occurred.");
+        }
+    }
     @PatchMapping("/update")
     public ResponseEntity<String> updateAuthor(@RequestBody @Validated Author author, BindingResult result){
         if(result.hasErrors()){
