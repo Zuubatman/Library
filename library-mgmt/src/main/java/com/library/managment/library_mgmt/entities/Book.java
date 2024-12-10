@@ -31,10 +31,4 @@ public class Book {
         this.publicationYear = publicationYear;
         this.authorId = authorId;
     }
-
-    @Override
-    public String toString() {
-        return "Book [id=" + id + ", title=" + title + ", isbn=" + isbn +
-                ", publicationYear=" + publicationYear + ", authorId=" + authorId +"]";
-    }
 }

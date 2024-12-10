@@ -3,6 +3,7 @@ package com.library.managment.library_mgmt.repository;
 import com.library.managment.library_mgmt.entities.Author;
 import com.library.managment.library_mgmt.entities.Book;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -36,8 +37,8 @@ public class BooksRepository {
         return mongoOps.find(query, Book.class);
     }
 
-    public void addBook(Book book){
-        mongoOps.insert(book);
+    public Book addBook(Book book){
+        return mongoOps.insert(book);
     }
 
     public DeleteResult deleteBook(String id){
@@ -46,9 +47,9 @@ public class BooksRepository {
         return mongoOps.remove(query, Book.class);
     }
 
-    public void updateBook(Book book){
+    public UpdateResult updateBook(Book book){
         Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(book.getId()));
+        query.addCriteria(Criteria.where("isbn").is(book.getIsbn()));
 
         Update update = new Update();
         update.set("title", book.getTitle());
@@ -56,7 +57,7 @@ public class BooksRepository {
         update.set("publicationYear", book.getPublicationYear());
         update.set("authorId", book.getAuthorId());
 
-        mongoOps.updateFirst(query, update, Book.class);
+        return mongoOps.updateFirst(query, update, Book.class);
 
     }
 
@@ -80,5 +81,4 @@ public class BooksRepository {
         return books;
 
     }
-
 }

@@ -3,6 +3,7 @@ package com.library.managment.library_mgmt.service;
 import com.library.managment.library_mgmt.entities.Book;
 import com.library.managment.library_mgmt.repository.BooksRepository;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,16 +29,14 @@ public class BooksService {
         return repository.getBooksByTitle(title);
     }
 
-    public void addBook(Book book){
-        repository.addBook(book);
-    }
+    public Book addBook(Book book){ return repository.addBook(book); }
 
     public DeleteResult deleteBook(String id){
         return repository.deleteBook(id);
     }
 
-    public void updateBook(Book book){
-        repository.updateBook(book);
+    public UpdateResult updateBook(Book book){
+        return repository.updateBook(book);
     }
 
     public List<Book> searchByTitleOrAuthor(String name){

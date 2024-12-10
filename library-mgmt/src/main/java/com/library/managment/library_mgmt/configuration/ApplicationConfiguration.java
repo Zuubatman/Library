@@ -18,5 +18,4 @@ public class ApplicationConfiguration {
     MongoOperations mongoTemplate(MongoClient mongoClient) {
         return new MongoTemplate(mongoClient, "library");
     }
-
 }

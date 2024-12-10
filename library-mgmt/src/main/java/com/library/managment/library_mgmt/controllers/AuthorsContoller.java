@@ -1,6 +1,7 @@
 package com.library.managment.library_mgmt.controllers;
 
 import com.library.managment.library_mgmt.entities.Author;
+import com.library.managment.library_mgmt.entities.Book;
 import com.library.managment.library_mgmt.service.AuthorsService;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -31,7 +32,12 @@ public class AuthorsContoller {
             return ResponseEntity.badRequest().body("Invalid id.");
         }
         try {
-            return ResponseEntity.ok(service.getAuthorById(id));
+            Author author = service.getAuthorById(id);
+            if(author != null){
+                return ResponseEntity.ok().body(author);
+            }else{
+                return ResponseEntity.notFound().build();
+            }
 
         }catch (Exception e){
             return ResponseEntity.internalServerError().body("An error occoured.");
@@ -44,7 +50,12 @@ public class AuthorsContoller {
             return ResponseEntity.badRequest().body("Invalid name.");
         }
         try {
-            return ResponseEntity.ok(service.getAuthorByName(name));
+            List<Author> author = service.getAuthorByName(name);
+            if(!author.isEmpty()){
+                return ResponseEntity.ok().body(author);
+            }else {
+                return ResponseEntity.notFound().build();
+            }
 
         }catch (Exception e){
             return ResponseEntity.internalServerError().body("An error occoured.");
@@ -57,8 +68,12 @@ public class AuthorsContoller {
             return ResponseEntity.badRequest().body("Validation errors found.");
         }
         try{
-            service.addAuthor(author);
-            return ResponseEntity.ok().body("Author created.");
+            Author authorAdded = service.addAuthor(author);
+            if(authorAdded != null){
+                return ResponseEntity.ok().body("Author added.");
+            } else{
+                return ResponseEntity.internalServerError().body("An error has occurred.");
+            }
 
         }catch(Exception e){
             return  ResponseEntity.internalServerError().body("An error has occurred.");
@@ -67,7 +82,7 @@ public class AuthorsContoller {
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteAuthor(@RequestParam(value = "id") String id){
-        if(id.trim().isEmpty() || id == null){
+        if(id == null || id.trim().isEmpty()){
             return ResponseEntity.badRequest().body("Validation errors found.");
         }
         try{
@@ -75,7 +90,7 @@ public class AuthorsContoller {
             if(deleted.getDeletedCount() > 0){
                 return ResponseEntity.ok().body("Author deleted");
             }
-            return ResponseEntity.badRequest().body("Author not found");
+            return ResponseEntity.notFound().build();
 
         } catch (Exception e){
             return ResponseEntity.internalServerError().body("An error has occurred.");
@@ -87,8 +102,12 @@ public class AuthorsContoller {
             return ResponseEntity.badRequest().body("Validation errors found.");
         }
         try{
-            service.updateAuthor(author);
-            return ResponseEntity.ok().body("Author updated.");
+            var update = service.updateAuthor(author);
+            if(update.getModifiedCount() > 0 ){
+                return ResponseEntity.ok().body("Author updated.");
+            } else {
+                return ResponseEntity.notFound().build();
+            }
 
         }catch(Exception e){
             return  ResponseEntity.internalServerError().body("An error has occurred.");
